@@ -12,20 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('currencies', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')
+                ->primary();
             $table->string('title', 100);
             $table->string('code', 100)
                 ->unique();
-            $table->char('symbol');
+            $table->string('symbol', 5);
         });
         Schema::create('currency_rates', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('from_id');      // From currency
+            $table->uuid('id')
+                ->primary();
+            $table->uuid('from_id');      // From currency
             $table->foreign('from_id')
                 ->references('id')
                 ->on('currencies');
 
-            $table->unsignedBigInteger('to_id');        // To currency
+            $table->uuid('to_id');        // To currency
             $table->foreign('to_id')
                 ->references('id')
                 ->on('currencies');

@@ -16,8 +16,10 @@ services:
     depends_on:
       - db
       - elasticsearch
+#    volumes:
+#      - ./dyppis_backend/.env:/var/www/html/.env
     volumes:
-      - ./dyppis_backend/.env:/var/www/html/.env
+      - ./dyppis_backend:/var/www/html
     healthcheck:
       test: [ "CMD", "php-fpm", "-v" ]
       interval: 30s
@@ -34,8 +36,10 @@ services:
       - docker-network
     depends_on:
       - db
+#    volumes:
+#      - ./dyppis_backend/.env:/var/www/html/.env
     volumes:
-      - ./dyppis_backend/.env:/var/www/html/.env
+      - ./dyppis_backend:/var/www/html
     command: php artisan queue:work
 
   caddy:

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,7 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')
+                ->primary();
             $table->string('nickname', 100)
                 ->unique();
             $table->string('email', 100)
@@ -22,7 +24,8 @@ return new class extends Migration
                 ->default(0);
             $table->float('rating')
                 ->nullable();
-            $table->unsignedBigInteger('avatar_id');
+            $table->uuid('avatar_id')
+                ->nullable();
             $table->foreign('avatar_id')
                 ->references('id')
                 ->on('mediafiles');
@@ -36,11 +39,51 @@ return new class extends Migration
             $table->string('seo_source', 100)
                 ->nullable();
 
-            $table->unsignedBigInteger('country_id');
-
             $table->rememberToken();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
+        });
+
+        Schema::create('user_logs', function (Blueprint $table) {
+            $table->uuid('id')
+                ->primary();
+            $table->uuid('user_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users');
+
+            $table->string('ip', 50)
+                ->nullable();
+
+            $table->integer('attempts')
+                ->default(1);
+
+            $table->timestamp('created_at')
+                ->default(DB::raw('CURRENT_TIMESTAMP'));
+        });
+
+        Schema::create('user_notifications', function (Blueprint $table) {
+            $table->uuid('id')
+                ->primary();
+            $table->uuid('user_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users');
+
+            $table->uuid('title_id');
+            $table->foreign('title_id')
+                ->references('id')
+                ->on('translations');
+
+            $table->uuid('message_id');
+            $table->foreign('message_id')
+                ->references('id')
+                ->on('translations');
+
+            $table->timestamp('read_at');
+
+            $table->timestamp('created_at')
+                ->default(DB::raw('CURRENT_TIMESTAMP'));
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -64,6 +107,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('user_logs');
+        Schema::dropIfExists('user_notifications');
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');

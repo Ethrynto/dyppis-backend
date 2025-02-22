@@ -14,8 +14,9 @@ return new class extends Migration
         /*
          * For the mediafile categories
          */
-        Schema::create('mediafiles_categories', function (Blueprint $table) {
-            $table->id();
+        Schema::create('mediafile_categories', function (Blueprint $table) {
+            $table->uuid('id')
+                ->primary();
             $table->string('slug', 100)
                 ->unique();
             $table->string('title', 100);
@@ -30,14 +31,15 @@ return new class extends Migration
          * For the mediafiles
          */
         Schema::create('mediafiles', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')
+                ->primary();
             $table->string('file_name');                // File name
             $table->string('file_type');                // File type (example image/png)
             $table->integer('file_size');               // File size (in bytes)
-            $table->unsignedBigInteger('category_id');  // File category
+            $table->uuid('category_id');                // File category
             $table->foreign('category_id')
                 ->references('id')
-                ->on('mediafiles_categories')
+                ->on('mediafile_categories')
                 ->onDelete('cascade');
             $table->timestamps();
         });
@@ -49,6 +51,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('mediafiles');
-        Schema::dropIfExists('mediafiles_categories');
+        Schema::dropIfExists('mediafile_categories');
     }
 };

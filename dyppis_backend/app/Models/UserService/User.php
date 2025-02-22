@@ -1,17 +1,24 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\UserService;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\MediaService\Mediafile;
+use Database\Factories\UserService\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
+
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +26,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'nickname',
         'email',
         'password',
     ];
@@ -44,6 +51,32 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'balance' => 'float',
+            'rating' => 'float',
         ];
+    }
+
+    /**
+     *  User avatar
+     */
+    public function avatar(): BelongsTo
+    {
+        return $this->belongsTo(Mediafile::class, 'avatar_id');
+    }
+
+    /**
+     *  User logs.
+     */
+    public function logs(): HasMany
+    {
+        return $this->hasMany(UserLog::class, 'user_id');
+    }
+
+    /**
+     *  User notifications.
+     */
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(UserNotification::class, 'user_id');
     }
 }
