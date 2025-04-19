@@ -19,5 +19,6 @@ Route::prefix('v1')->group(function () {
     Route::prefix('platforms')->group(function () {
         Route::get('/', [PlatformController::class, 'index']);      // Get all platforms
         Route::get('/{id}', [PlatformController::class, 'show']);   // Get a platform by ID
+        Route::post('/', [PlatformController::class, 'store']);     // Create a new platform
     });
 });
