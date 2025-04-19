@@ -18,7 +18,8 @@ class MediafileResource extends JsonResource
             'file_name' => $this->file_name,
             'file_type' => $this->file_type,
             'file_size' => $this->file_size,
-            'category' => $this->category ? new MediafileCategoryResource($this->category) : null,
+            'url' => $request->getSchemeAndHttpHost() . $this->category->url . '/' . $this->file_name,
+            //'category' => $this->category ? new MediafileCategoryResource($this->category) : null,
         ];
     }
 }

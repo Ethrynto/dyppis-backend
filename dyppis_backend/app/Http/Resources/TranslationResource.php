@@ -15,14 +15,14 @@ class TranslationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'ar' => $this->ar,
-            'de' => $this->de,
-            'en' => $this->en,
-            'es' => $this->es,
-            'fr' => $this->fr,
-            'it' => $this->it,
-            'ru' => $this->ru,
-            'tr' => $this->tr,
+            'ar' => $this->ar ?? null,
+            'de' => $this->de ?? null,
+            'en' => $this->en ?? null,
+            'es' => $this->es ?? null,
+            'fr' => $this->fr ?? null,
+            'it' => $this->it ?? null,
+            'ru' => $this->ru ?? null,
+            'tr' => $this->tr ?? null,
         ];
     }
 }

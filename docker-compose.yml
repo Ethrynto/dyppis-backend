@@ -58,13 +58,13 @@ services:
 
   db:
     container_name: dyppis_postgres
-    image: bitnami/postgresql:16.3.0
+    image: postgres:latest
     platform: linux/amd64
     ports:
       - "5432:5432"
     restart: always
     volumes:
-      - db-data:/bitnami/postgresql
+      - db-data:/postgresql
     environment:
       POSTGRES_DB: ${POSTGRESQL_DATABASE}
       POSTGRES_USER: ${POSTGRESQL_USERNAME}
@@ -79,13 +79,13 @@ services:
 
   redis:
     container_name: dyppis_redis
-    image: bitnami/redis:7.2
+    image: redis:latest
     platform: linux/amd64
     ports:
       - "6379:6379"
     restart: always
     volumes:
-      - redis-data:/bitnami/redis/data
+      - redis-data:/redis/data
     environment:
       - ALLOW_EMPTY_PASSWORD=no
       - REDIS_PASSWORD=${REDIS_PASSWORD}
@@ -94,7 +94,7 @@ services:
       - docker-network
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
+    image: elastic/elasticsearch:7.17.28
     container_name: dyppis_elasticsearch
     environment:
       - discovery.type=single-node
@@ -116,7 +116,7 @@ services:
       start_period: 10s
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.10.1
+    image: elastic/kibana:7.17.28
     container_name: dyppis_kibana
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
