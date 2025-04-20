@@ -6,6 +6,7 @@ use App\Models\MediaService\Mediafile;
 use App\Models\Translation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Platform extends Model
 {
@@ -59,5 +60,11 @@ class Platform extends Model
         return $this->belongsTo(Platform::class, 'parent_id');
     }
 
-
+    /**
+     * Categories associated with the platform (many-to-many).
+     */
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'categories_platforms', 'platform_id', 'category_id', 'id', 'id');
+    }
 }
