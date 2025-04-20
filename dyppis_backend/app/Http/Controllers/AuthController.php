@@ -15,8 +15,6 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    use HasApiTokens;
-
     /**
      *  User registration
      *
