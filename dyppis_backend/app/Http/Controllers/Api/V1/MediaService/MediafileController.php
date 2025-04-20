@@ -60,7 +60,7 @@ class MediafileController extends Controller
      *  @param string $id
      *  @return JsonResponse
      */
-    public static function remove(string $id): JsonResponse
+    public static function remove(string $id): JsonResponse // TODO: this method not deleting file in storage (only db). Correct this
     {
         $fileInfo = Mediafile::where('id', $id)
             ->first(['file_name', 'category_id']);
