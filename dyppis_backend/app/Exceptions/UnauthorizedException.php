@@ -22,6 +22,6 @@ class UnauthorizedException extends Exception
             'message' => $this->data['messages'] ?? 'Unauthorized access',
             'code' => $this->data['code'] ?? null,
             'details' => $this->data['details'] ?? null,
-        ], 404);
+        ], 401);
     }
 }
