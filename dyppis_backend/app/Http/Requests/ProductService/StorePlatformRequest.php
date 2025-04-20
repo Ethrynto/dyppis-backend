@@ -25,8 +25,9 @@ class StorePlatformRequest extends FormRequest
         return [
             'slug' => ['required', 'string', 'max:255', 'unique:platforms,slug'],
             'title' => ['required', 'string', 'max:255'],
-            'logo' => ['nullable', 'image', 'max:8192', 'file', 'mimes:jpg,jpeg,png,webp,avif'],
-            'category' => ['required', 'exists:platform_categories,id'],
+            'logo' => ['nullable', 'max:8192', 'file', 'mimes:jpg,jpeg,png,webp,avif,svg'],
+            'banner' => ['nullable', 'max:8192', 'file', 'mimes:jpg,jpeg,png,webp,avif,svg'],
+            'category_id' => ['required', 'string', 'exists:platform_categories,id'],
             'parent' => ['nullable', 'exists:platforms,id'],
             'sales' => ['nullable', 'integer'],
             'views' => ['nullable', 'integer'],
