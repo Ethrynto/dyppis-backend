@@ -46,6 +46,12 @@ return new class extends Migration
                 ->references('id')
                 ->on('mediafiles');
 
+            $table->uuid('banner_id')
+                ->nullable();
+            $table->foreign('banner_id')
+                ->references('id')
+                ->on('mediafiles');
+
             $table->uuid('category_id')
                 ->nullable();
             $table->foreign('category_id')
@@ -59,9 +65,11 @@ return new class extends Migration
 //                ->on('platforms');
 
             $table->integer('sales')
+                ->nullable()
                 ->default(0);
 
             $table->integer('views')
+                ->nullable()
                 ->default(0);
 
             $table->timestamps();
