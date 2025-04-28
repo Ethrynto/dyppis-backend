@@ -29,8 +29,11 @@ return new class extends Migration
                 ->references('id')
                 ->on('mediafiles');
 
-            $table->text('description')
+            $table->uuid('description_id')
                 ->nullable();
+            $table->foreign('description_id')
+                ->references('id')
+                ->on('translations');
         });
 
         Schema::create('categories_deliveries', function (Blueprint $table) {
