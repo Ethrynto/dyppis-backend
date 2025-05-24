@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ProductService\Product;
 use App\Models\UserService\User;
 use Database\Seeders\MediaService\MediafileCategorySeeder;
 use Database\Seeders\ProductService\CategorySeeder;
@@ -25,5 +26,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CategorySeeder::class);
         $this->call(DeliverySeeder::class);
         User::factory(50)->create();
+        Product::factory(50)->create();
     }
 }
