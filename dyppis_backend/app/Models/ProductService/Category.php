@@ -17,7 +17,7 @@ class Category extends Model
     protected $fillable = [
         'id',
         'slug',
-        'title_id',
+        'title',
         'logo_id',
         'is_public',
     ];
@@ -25,18 +25,11 @@ class Category extends Model
     protected $casts = [
         'id' => 'string',
         'slug' => 'string',
-        'title_id' => 'string',
+        'title' => 'string',
         'logo_id' => 'string',
         'is_public' => 'boolean',
     ];
 
-    /**
-     *  Category title.
-     */
-    public function title(): BelongsTo
-    {
-        return $this->belongsTo(Translation::class, 'title_id', 'id');
-    }
 
     /**
      *  Category logo.
@@ -46,6 +39,12 @@ class Category extends Model
         return $this->belongsTo(Mediafile::class, 'logo_id', 'id');
     }
 
+
+    /**
+     *  Category platforms
+     *
+     *  @return BelongsToMany
+     */
     public function platforms(): BelongsToMany
     {
         return $this->belongsToMany(Platform::class, 'categories_platforms', 'category_id', 'platform_id');
