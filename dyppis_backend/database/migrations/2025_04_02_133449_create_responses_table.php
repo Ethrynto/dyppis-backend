@@ -16,10 +16,10 @@ return new class extends Migration
                 ->primary();
 
             /* Response product */
-            $table->uuid('category_id');
-            $table->foreign('category_id')
+            $table->uuid('product_id');
+            $table->foreign('product_id')
                 ->references('id')
-                ->on('categories');
+                ->on('products');
 
             $table->text('value')
                 ->nullable();

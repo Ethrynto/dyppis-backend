@@ -18,10 +18,8 @@ return new class extends Migration
             $table->string('slug')
                 ->unique();
 
-            $table->uuid('title_id');
-            $table->foreign('title_id')
-                ->references('id')
-                ->on('translations');
+            $table->text('title');
+            $table->fullText('title');
 
             $table->uuid('logo_id')
                 ->nullable();

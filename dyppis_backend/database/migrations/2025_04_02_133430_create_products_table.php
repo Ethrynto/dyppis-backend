@@ -19,16 +19,12 @@ return new class extends Migration
                 ->unique();
 
             /* Product title */
-            $table->uuid('title_id');
-            $table->foreign('title_id')
-                ->references('id')
-                ->on('translations');
+            $table->text('title');
+            $table->fullText('title');
 
             /* Product description */
-            $table->uuid('description_id');
-            $table->foreign('description_id')
-                ->references('id')
-                ->on('translations');
+            $table->text('description');
+            $table->fullText('description');
 
             /* Product price */
             $table->float('price')

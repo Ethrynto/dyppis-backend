@@ -70,15 +70,11 @@ return new class extends Migration
                 ->references('id')
                 ->on('users');
 
-            $table->uuid('title_id');
-            $table->foreign('title_id')
-                ->references('id')
-                ->on('translations');
+            $table->text('title');
+            $table->fullText('title');
 
-            $table->uuid('message_id');
-            $table->foreign('message_id')
-                ->references('id')
-                ->on('translations');
+            $table->text('message');
+            $table->fullText('message');
 
             $table->timestamp('read_at');
 

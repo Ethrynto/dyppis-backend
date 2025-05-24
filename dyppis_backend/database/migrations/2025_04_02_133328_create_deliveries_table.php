@@ -18,10 +18,11 @@ return new class extends Migration
             $table->string('slug')
                 ->unique();
 
-            $table->uuid('title_id');
-            $table->foreign('title_id')
-                ->references('id')
-                ->on('translations');
+            $table->text('title');
+            $table->fullText('title');
+
+            $table->text('description');
+            $table->fullText('description');
 
             $table->uuid('logo_id')
                 ->nullable();
@@ -29,11 +30,6 @@ return new class extends Migration
                 ->references('id')
                 ->on('mediafiles');
 
-            $table->uuid('description_id')
-                ->nullable();
-            $table->foreign('description_id')
-                ->references('id')
-                ->on('translations');
         });
 
         Schema::create('categories_deliveries', function (Blueprint $table) {
