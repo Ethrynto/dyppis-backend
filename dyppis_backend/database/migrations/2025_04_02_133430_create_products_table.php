@@ -27,16 +27,24 @@ return new class extends Migration
             $table->fullText('description');
 
             /* Product price */
-            $table->float('price')
+            $table->integer('price')
                 ->default(1);
 
             /* Product old price */
-            $table->float('old_price')
+            $table->integer('old_price')
                 ->nullable();
 
             /* Product stocks */
             $table->integer('in_stock')
                 ->default(1);
+
+            /* Product sales */
+            $table->integer('sales')
+                ->default(0);
+
+            /* Product views */
+            $table->integer('views')
+                ->default(0);
 
             /* Product rating */
             $table->float('rating')
