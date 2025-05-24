@@ -6,6 +6,7 @@ use App\Models\MediaService\Mediafile;
 use App\Models\Translation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
@@ -43,5 +44,10 @@ class Category extends Model
     public function logo(): BelongsTo
     {
         return $this->belongsTo(Mediafile::class, 'logo_id', 'id');
+    }
+
+    public function platforms(): BelongsToMany
+    {
+        return $this->belongsToMany(Platform::class, 'categories_platforms', 'category_id', 'platform_id');
     }
 }
