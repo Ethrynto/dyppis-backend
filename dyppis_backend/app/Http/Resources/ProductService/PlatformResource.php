@@ -22,7 +22,7 @@ class PlatformResource extends JsonResource
             'title' => ($this->title),
             'logo' => MediafileResource::make($this->logo) ?? null,
             'category' => PlatformCategoryResource::make($this->category),
-            'categories' => CategoryResource::collection($this->categories),
+            //'categories' => CategoryResource::collection($this->categories),
             'parent' => PlatformResource::make($this->parent) ?? null,
             'sales' => $this->sales,
             'views' => $this->views,
