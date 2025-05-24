@@ -3,7 +3,6 @@
 namespace App\Http\Resources\ProductService;
 
 use App\Http\Resources\MediaService\MediafileResource;
-use App\Http\Resources\TranslationResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,7 +17,7 @@ class ProductResource extends JsonResource
     {
         return [
             'slug' => $this->slug,
-            'title' => TranslationResource::make($this->title),
+            'title' => $this->title,
             'logo' => MediafileResource::make($this->logo) ?? null,
             'platform' => PlatformResource::make($this->platform) ?? null,
             'category' => CategoryResource::make($this->category) ?? null,

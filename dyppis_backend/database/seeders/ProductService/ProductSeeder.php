@@ -7,6 +7,8 @@ use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
 {
+
+    private static $items = [];
     /**
      * Run the database seeds.
      */

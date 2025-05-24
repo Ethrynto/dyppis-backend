@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\ProductService;
 
-use App\Http\Resources\TranslationResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,7 +16,7 @@ class AttributeResource extends JsonResource
     {
         return [
             'slug' => $this->slug,
-            'title' => TranslationResource::make($this->title),
+            'title' => $this->title,
             'platform' => PlatformResource::make($this->platform) ?? null,
             'category' => CategoryResource::make($this->category) ?? null,
             'value_type' => $this->value_type,

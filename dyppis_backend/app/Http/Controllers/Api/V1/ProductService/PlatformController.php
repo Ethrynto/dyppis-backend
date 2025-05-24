@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class PlatformController extends Controller
 {
@@ -149,5 +150,38 @@ class PlatformController extends Controller
         }
         else
             throw new UnauthorizedException([]);
+    }
+
+
+    public function addCategories(Request $request, string $id): \Illuminate\Http\JsonResponse
+    {
+        $fieldType = 'slug';
+        if (UuidHelper::isUuid($id))
+            $fieldType = 'id';
+
+        $request->validate([
+            'categories' => ['nullable', 'array'],
+        ]);
+        try {
+            $platformId = $id;
+            if ($fieldType == 'slug')
+                $platformId = Platform::where('slug', $id)->first()->id;
+
+            $data = [];
+            foreach ($request->get('categories') as $category)
+            {
+                $data[] = [
+                    'platform_id' => $platformId,
+                    'category_id' => $category
+                ];
+            }
+
+            DB::table('categories_platforms')->insert($data);
+            return ApiResponse::created([]);
+        }
+        catch (\Exception $exception)
+        {
+            throw new NotFoundException(['code' => 404, 'details' => 'Not Found', 'message' => $exception->getMessage()]);
+        }
     }
 }
