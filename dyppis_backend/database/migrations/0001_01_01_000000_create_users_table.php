@@ -33,6 +33,9 @@ return new class extends Migration
             $table->string('register_ip', 50)
                 ->nullable();
 
+            $table->string('role')
+                ->default('user');
+
             $table->string('phone', 50)
                 ->nullable();
 
