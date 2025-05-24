@@ -97,28 +97,43 @@ class PlatformController extends Controller
      */
     public function update(UpdatePlatformRequest $request, string $id): JsonResource
     {
-        $platform = Platform::where('id', $id)->firstOrFail();
+        $fieldType = 'slug';
+        if (UuidHelper::isUuid($id))
+            $fieldType = 'id';
 
+        $platform = Platform::where($fieldType, $id)->firstOrFail();
+
+        // TODO: not work the update logo
         if ($request->hasFile('logo'))
             $logo = MediafileController::load($request->file('logo'), 'platform');
         if ($request->hasFile('banner'))
             $banner = MediafileController::load($request->file('banner'), 'banner');
 
-        $platformInfo = [
-            'slug' => $request->get('slug'),
-            'title' => $request->get('title'),
-            'parent_id' => $request->get('parent_id'),
-            'category_id' => $request->get('category_id'),
-            'sales' => $request->get('sales'),
-            'views' => $request->get('views'),
-        ];
         if(isset($logo))
-            $platformInfo['logo_id'] = $logo->getData()->data->id ?? null;
+            $platform->logo_id = $logo->getData()->data->id ?? null;
 
         if(isset($banner))
-            $platformInfo['banner_id'] = $banner->getData()->data->id ?? null;
+            $platform->banner_id = $banner->getData()->data->id ?? null;
 
-        $platform->update($platformInfo);
+        if($request->has('slug'))
+            $platform->slug = $request->get('slug');
+
+        if($request->has('title'))
+            $platform->title = $request->get('title');
+
+        if($request->has('parent_id'))
+            $platform->parent_id = $request->get('parent_id');
+
+        if($request->has('category_id'))
+            $platform->category_id = $request->get('category_id');
+
+        if($request->has('sales'))
+            $platform->sales = $request->get('sales');
+
+        if($request->has('views'))
+            $platform->views = $request->get('views');
+
+        $platform->save();
         return new PlatformResource($platform);
     }
 
