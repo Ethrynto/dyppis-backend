@@ -18,7 +18,7 @@ class ProductResource extends JsonResource
         return [
             'slug' => $this->slug,
             'title' => $this->title,
-            'logo' => MediafileResource::make($this->logo) ?? null,
+            //'logo' => MediafileResource::make($this->logo) ?? null,
             'platform' => PlatformResource::make($this->platform) ?? null,
             'category' => CategoryResource::make($this->category) ?? null,
             'delivery' => DeliveryResource::make($this->delivery) ?? null,
