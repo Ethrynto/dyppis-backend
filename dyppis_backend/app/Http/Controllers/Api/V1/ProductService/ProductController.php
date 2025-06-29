@@ -16,17 +16,18 @@ class ProductController extends Controller
         $size = $request->input('size', 30);
         Cache::forget('products'); // Clear the cache before storing new data. TODO: Remove this line in production
         return ProductResource::collection(Cache::remember('products', 3600, function () use ($size, $request) {
-            $query = Product::query();
-
-            if ($request->has('sortBy')) {
-                $orderBy = $request->get('orderBy', 'desc');
-                if($orderBy != 'asc' && $orderBy != 'desc') {
-                    $orderBy = 'desc';
-                }
-                $query->orderBy($request->input('sortBy'), $orderBy);
-            }
-
-            return $query->paginate($size);
+//            $query = Product::query();
+//
+//            if ($request->has('sortBy')) {
+//                $orderBy = $request->get('orderBy', 'desc');
+//                if($orderBy != 'asc' && $orderBy != 'desc') {
+//                    $orderBy = 'desc';
+//                }
+//                $query->orderBy($request->input('sortBy'), $orderBy);
+//            }
+//
+//            return $query->paginate($size);
+            return ProductFilterController::filterProducts($request, $size);
         }));
     }
 }
