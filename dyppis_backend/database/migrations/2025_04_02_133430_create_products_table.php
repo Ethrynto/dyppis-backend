@@ -73,6 +73,18 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::create('products_users', function (Blueprint $table) {
+            $table->uuid('product_id');
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products');
+
+            $table->uuid('user_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users');
+        });
     }
 
     /**
@@ -80,6 +92,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('products_users');
         Schema::dropIfExists('products');
     }
 };
