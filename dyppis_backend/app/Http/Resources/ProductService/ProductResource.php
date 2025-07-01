@@ -18,11 +18,12 @@ class ProductResource extends JsonResource
         return [
             'slug' => $this->slug,
             'title' => $this->title,
-            //'logo' => MediafileResource::make($this->logo) ?? null,
+//            'images' => MediafileResource::collection($this->images) ?? null,
             'platform' => PlatformResource::make($this->platform) ?? null,
             'category' => CategoryResource::make($this->category) ?? null,
             'delivery' => DeliveryResource::make($this->delivery) ?? null,
             'attributes' => AttributeResource::collection($this->attributes) ?? null,
+            'images' => ($this->images) ?? null,
             'price' => $this->price,
             'old_price' => $this->old_price ?? null,
             'in_stock' => $this->in_stock ?? null,

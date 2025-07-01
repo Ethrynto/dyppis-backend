@@ -85,6 +85,18 @@ return new class extends Migration
                 ->references('id')
                 ->on('users');
         });
+
+        Schema::create('products_images', function (Blueprint $table) {
+            $table->uuid('product_id');
+            $table->foreign('product_id')
+                ->references('id')
+                ->on('products');
+
+            $table->uuid('mediafile_id');
+            $table->foreign('mediafile_id')
+                ->references('id')
+                ->on('mediafiles');
+        });
     }
 
     /**
@@ -92,6 +104,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('products_images');
         Schema::dropIfExists('products_users');
         Schema::dropIfExists('products');
     }

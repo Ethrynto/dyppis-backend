@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin\ProductService;
+namespace App\Http\Controllers\View\ProductService;
 
 use App\Http\Controllers\Controller;
 use App\Models\MediaService\MediafileCategory;
 use App\Models\ProductService\Platform;
+use App\Models\ProductService\PlatformCategory;
 use Illuminate\Http\Request;
 
 class PlatformController extends Controller
@@ -27,6 +28,9 @@ class PlatformController extends Controller
 
     public function create()
     {
-        
+        $platforms = Platform::orderBy('title', 'asc')->pluck('id', 'title');
+        $platformCategories = PlatformCategory::orderBy('title', 'asc')->pluck('id', 'title');
+        //return response()->json($platformCategories);
+        return view('admin.platforms.create', compact('platforms', 'platformCategories'));
     }
 }
