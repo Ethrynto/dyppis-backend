@@ -11,34 +11,34 @@ use Illuminate\Http\Request;
 class ProductFilterController extends Controller
 {
     /**
-     * Функция для парсинга значений фильтров из GET-параметров
+     *  This method parses the filter value from the request.
      */
     private static function parseFilterValue($value)
     {
         if (strpos($value, '-') !== false) {
-            // Диапазон значений, например, "10-16" или "-9999"
+            // Range values can be in the format "min-max" or "min-" or "-max"
             list($min, $max) = explode('-', $value);
             return [
                 'min' => $min === '' ? null : $min,
                 'max' => $max === '' ? null : $max
             ];
         } elseif (strpos($value, ',') !== false) {
-            // Список значений, например, "silver,global,berkut"
+            // The list of values can be in the format "value1,value2,value3"
             return explode(',', $value);
         } else {
-            // Одиночное значение
+            // Alone value or single integer
             return $value;
         }
     }
 
     /**
-     * Основной метод для фильтрации товаров
+     *  This method filters products based on various criteria such as category, platform, delivery, attributes, price range, reviews, and discounts.
      */
     public static function filterProducts(Request $request, int $size = 30)
     {
         $products = Product::query();
 
-        // Фильтрация по базовым полям: категория, платформа, способ доставки
+        // Filtering by category, platform, and delivery
         if ($request->has('category_id')) {
             $products->where('category_id', $request->input('category_id'));
         }
@@ -51,7 +51,7 @@ class ProductFilterController extends Controller
             $products->where('delivery_id', $request->input('delivery_id'));
         }
 
-        // Фильтрация по атрибутам
+        // Filtering by attributes
         $attributeFilters = $request->except(['category_id', 'platform_id', 'delivery_id', 'price', 'hasReviews', 'hasDiscount']);
         foreach ($attributeFilters as $slug => $value) {
             $attribute = Attribute::where('slug', $slug)->first();
@@ -61,7 +61,7 @@ class ProductFilterController extends Controller
                     $query->where('attribute_id', $attribute->id);
                     if ($attribute->value_type === 'int') {
 
-                        // Обработка диапазона или одиночного значения для int
+                        // Handle by integer range or single value
                         if (is_array($parsedValue) && isset($parsedValue['min'])) {
                             if ($parsedValue['min'] !== null) {
                                 $query->where('value_int', '>=', $parsedValue['min']);
@@ -73,7 +73,7 @@ class ProductFilterController extends Controller
                             $query->where('value_int', $parsedValue);
                         }
                     } else {
-                        // Обработка для string, bool, enum
+                        // Handle by string, bool, enum
                         if (is_array($parsedValue)) {
                             $query->whereIn('value', $parsedValue);
                         } else {
@@ -84,7 +84,7 @@ class ProductFilterController extends Controller
             }
         }
 
-        // Фильтрация по цене
+        // Filtering by price range
         if ($request->has('price')) {
             $priceRange = self::parseFilterValue($request->input('price'));
             if (is_array($priceRange) && isset($priceRange['min'])) {
@@ -97,20 +97,44 @@ class ProductFilterController extends Controller
             }
         }
 
-        // Фильтрация по наличию отзывов
+        // Filtering by reviews
         if ($request->has('hasReviews') && $request->input('hasReviews') === 'true') {
             $products->whereHas('users', function ($query) {
                 $query->whereHas('reviews');
             });
         }
 
-        // Фильтрация по наличию скидки
+        // Filtering by discount
         if ($request->has('hasDiscount') && $request->input('hasDiscount') === 'true') {
             $products->whereNotNull('old_price');
         }
 
-        // Получение отфильтрованных товаров
+        // Get the filtered products
         $filteredProducts = $products->paginate($size);
+
+        // TODO: remove this line in production
+        for ($i = 0; $i < count($filteredProducts); $i++) {
+            $filteredProducts[$i]->images = [
+                [
+                    'file_name' => 'cs-2.jpeg',
+                    'file_type' => 'image/jpeg',
+                    'file_size' => 8096,
+                    'url' => 'http://127.0.0.1:8000/storage/uploads/images/products/cs-2.jpeg',
+                ],
+                [
+                    'file_name' => 'gta-5.jpg',
+                    'file_type' => 'image/jpg',
+                    'file_size' => 8096,
+                    'url' => 'http://127.0.0.1:8000/storage/uploads/images/products/gta-5.jpg',
+                ],
+                [
+                    'file_name' => 'forza-horizon-5.jpeg',
+                    'file_type' => 'image/jpeg',
+                    'file_size' => 8096,
+                    'url' => 'http://127.0.0.1:8000/storage/uploads/images/products/forza-horizon-5.jpeg',
+                ]
+            ];
+        }
 
         return $filteredProducts;
     }
